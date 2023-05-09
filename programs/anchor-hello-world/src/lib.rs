@@ -29,7 +29,7 @@ pub mod anchor_hello_world {
 
 #[derive(Accounts)]
 pub struct SendTweet<'info> {
-    #[account(init), payer = author, space = Tweet::LEN]
+    #[account(init, payer = author, space = Tweet::LEN)]
     pub tweet: Account<'info, Tweet>,
     #[account(mut)]
     pub author: Signer<'info>,
