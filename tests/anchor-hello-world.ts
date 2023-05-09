@@ -56,4 +56,29 @@ describe("anchor-hello-world", () => {
       assert.equal(tweetAccount.content, 'gm');
       assert.ok(tweetAccount.timestamp);
     })
+
+    it('can send a new tweet from a different author', async() => {
+      // Generate another user and airdrop them some SOL.
+      const otherUser = anchor.web3.Keypair.generate();
+
+      // Call the "SendTweet" instruction.
+      const tweet = anchor.web3.Keypair.generate();
+      await program.rpc.sendTweet('veganism', 'Yay Tofu!', {
+        accounts: {
+          tweet: tweet.publicKey,
+          author: otherUser.publicKey,
+          systemProgram: anchor.web3.SystemProgram.programId,
+        }, 
+        signers: [otherUser, tweet],
+      });
+
+      // Fetch the account details of the created tweet.
+      const tweetAccount = await program.account.tweet.fetch(tweet.publicKey);
+    
+      // Ensure it has the right data
+      assert.equal(tweetAccount.author.toBase58(), otherUser.publicKey.toBase58());
+      assert.equal(tweetAccount.topic, 'veganism');
+      assert.equal(tweetAccount.content, 'Yay tofu!');
+      assert.ok(tweetAccount.timestamp);
+    })
 });
