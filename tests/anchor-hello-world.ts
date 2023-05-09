@@ -1,5 +1,6 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
+import * as assert from "assert";
 import { AnchorHelloWorld } from "../target/types/anchor_hello_world";
 
 describe("anchor-hello-world", () => {
@@ -26,6 +27,11 @@ describe("anchor-hello-world", () => {
 
     // Fetch the account details of the created tweet.
     const tweetAccount = await program.account.tweet.fetch(tweet.publicKey);
-    console.log(tweetAccount);
+  
+    // Ensure it has the right data
+    assert.equal(tweetAccount.author.toBase58(), program.provider.wallet.publicKey.toBase58());
+    assert.equal(tweetAccount.topic, 'veganism');
+    assert.equal(tweetAccount.topic, 'Hummus, am I right?');
+    assert.ok(tweetAccount.timestamp);
   })
 });
