@@ -148,7 +148,7 @@ describe("anchor-hello-world", () => {
     });
 
     it('can filter tweets by topics', async () => {
-      const tweetAccounts = await program.acount.tweet.all([
+      const tweetAccounts = await program.account.tweet.all([
         {
           memcmp: {
             offset: 8 + // Discriminator.
